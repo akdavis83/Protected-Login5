@@ -1,0 +1,22 @@
+<script>
+    sessionStorage.setItem("userHash", userHash); // or localStorage.setItem("userHash", userHash);
+    const userHash = sessionStorage.getItem("userHash");
+if (userHash) {
+    loadUserSettings(userHash); // Custom function to load user-specific data
+}
+async function trackAction(actionType) {
+    const userHash = sessionStorage.getItem("userHash");
+    await fetch('/.netlify/functions/trackAction', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userHash, actionType, timestamp: Date.now() })
+    });
+}
+function applyUserPreferences(userHash) {
+    const preferences = getUserPreferences(userHash); // Fetch preferences from storage or backend
+    if (preferences.theme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
+}
+
+</script>
